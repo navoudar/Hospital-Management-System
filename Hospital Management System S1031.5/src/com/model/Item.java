@@ -8,6 +8,55 @@ import java.sql.Statement;
 
 public class Item {
 
+	String itemID;
+	String itemCode;
+	String itemName;
+	String itemPrice;
+	String itemDesc;
+	
+	
+	
+	
+	public String getItemID() {
+		return itemID;
+	}
+
+	public void setItemID(String itemID) {
+		this.itemID = itemID;
+	}
+
+	public String getItemCode() {
+		return itemCode;
+	}
+
+	public void setItemCode(String itemCode) {
+		this.itemCode = itemCode;
+	}
+
+	public String getItemName() {
+		return itemName;
+	}
+
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+
+	public String getItemPrice() {
+		return itemPrice;
+	}
+
+	public void setItemPrice(String itemPrice) {
+		this.itemPrice = itemPrice;
+	}
+
+	public String getItemDesc() {
+		return itemDesc;
+	}
+
+	public void setItemDesc(String itemDesc) {
+		this.itemDesc = itemDesc;
+	}
+
 	// A common method to connect to the DB
 	private Connection connect() {
 
@@ -195,6 +244,12 @@ public class Item {
 
 		return output;
 
+	}
+
+	@Override
+	public String toString() {
+		return "Item [itemID=" + itemID + ", itemCode=" + itemCode + ", itemName=" + itemName + ", itemPrice="
+				+ itemPrice + ", itemDesc=" + itemDesc + "]";
 	}
 
 }

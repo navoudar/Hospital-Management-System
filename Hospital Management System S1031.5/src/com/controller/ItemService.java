@@ -2,15 +2,23 @@ package com.controller;
 
 import com.model.Item;
 
+
 //For REST Service
 import javax.ws.rs.*;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-
+import javax.ws.rs.core.Response;
 //For JSON
 import com.google.gson.*;
 
+import org.glassfish.jersey.client.ClientConfig;
 //For XML
 import org.jsoup.*;
+
 import org.jsoup.parser.*;
 import org.jsoup.nodes.Document;
 
@@ -74,4 +82,49 @@ public class ItemService {
 
 		return output;
 	}
+	
+	@GET
+	@Path("/lab")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String testApi() {
+		
+		Client client = ClientBuilder.newClient();
+			
+		WebTarget target = client.target("http://localhost:8080/Lab6Rest/ItemService/Items/test");
+		
+		String output = target.request(MediaType.TEXT_PLAIN).get(String.class);
+		System.out.println(
+				target.request(MediaType.TEXT_PLAIN).get(String.class)
+				);
+		
+		return output;
+	}
+	
+	
+	@POST
+	@Path("/invoker")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String postcheck(String temp) {
+		
+		JsonObject itemObject = new JsonParser().parse(temp).getAsJsonObject();
+		
+		Client client = ClientBuilder.newClient();
+		
+		WebTarget target = client.target("http://localhost:8080/Lab6Rest/ItemService/Items/insert");
+		
+		Item item = new Item();
+		
+		item.setItemName(itemObject.get("itemName").getAsString());
+		item.setItemCode(itemObject.get("itemCode").getAsString());
+		item.setItemPrice(itemObject.get("itemPrice").getAsString());
+		item.setItemDesc(itemObject.get("itemDesc").getAsString());
+		
+		
+		String response = target.request(MediaType.APPLICATION_JSON).accept(MediaType.TEXT_PLAIN_TYPE).post(Entity.json(item),String.class);
+		
+
+		return response;
+	}
+	
 }
