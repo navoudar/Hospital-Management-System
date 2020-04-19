@@ -159,4 +159,88 @@ public class AdminDetails {
 		return output;
 
 }
+	
+	public String updateAdminDetails(String admin_id, String admin_uname, String admin_password,String admin_name) {
+
+		String output = "";
+
+		try {
+
+			Connection con = connect();
+
+			if (con == null) {
+
+				return "Error while connecting to the database for updating.";
+
+			}
+
+			// create a prepared statement
+			String query = "UPDATE m_admin SET m_admin_uname=?,m_admin_password=?,m_admin_name=?      WHERE m_admin_id=?";
+
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+
+			// binding values
+			
+			preparedStmt.setString(1, admin_uname);
+			//preparedStmt.setDouble(3, Double.parseDouble(price));
+			preparedStmt.setString(2, admin_password);
+			preparedStmt.setString(3, admin_name);
+			preparedStmt.setString(4, admin_id);
+			
+			//preparedStmt.setInt(5, Integer.parseInt(ID));
+
+			// execute the statement
+			preparedStmt.execute();
+			con.close();
+
+			output = "Updated successfully";
+
+		} catch (Exception e) {
+			output = "Error while updating the rooms.";
+			System.err.println(e.getMessage());
+		}
+
+		return output;
+
+	}
+
+	public String deleteRooms(String admin_id) {
+
+		String output = "";
+
+		try {
+
+			Connection con = connect();
+
+			if (con == null) {
+
+				return "Error while connecting to the database for deleting.";
+
+			}
+
+			// create a prepared statement
+
+			String query = "delete from m_admin where m_admin_id=?";
+
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+
+			// binding values
+			//preparedStmt.setInt(1, Integer.parseInt(room_code));
+			preparedStmt.setString(1, admin_id);
+
+			// execute the statement
+			preparedStmt.execute();
+			con.close();
+
+			output = "Deleted successfully";
+
+		} catch (Exception e) {
+			output = "Error while deleting the admin.";
+			System.err.println(e.getMessage());
+
+		}
+
+		return output;
+
+	}
 }
