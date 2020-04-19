@@ -1,0 +1,159 @@
+package com.model;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class AdminDetails {
+	String username ="";
+	String password ="";
+	private Connection connect() {
+
+		Connection con = null;
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+
+			// Provide the correct details: DBServer/DBName, username, password
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital_management_system?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return con;
+
+	}
+	public String Adminloging(String Uname, String Password) {
+		
+		String output="test";
+		
+		try {
+			Connection con = connect();
+
+			if (con == null) {
+				return "Error while connecting to the database for logging.";
+			}
+			
+			String query = "SELECT  m_admin_userName,m_admin_password FROM m_admin WHERE m_admin_userName =? AND m_admin_password =?";
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			
+			ResultSet rs = preparedStmt.executeQuery();
+			preparedStmt.setString(1, Uname);
+			preparedStmt.setString(2, Password);
+			
+			System.out.println("Uname"+Uname);
+			preparedStmt.execute();
+			
+			while(rs.next()) {
+				username = rs.getString("m_admin_userName");
+				password = rs.getString("m_admin_password");
+			}
+			con.close();
+			if(username.equalsIgnoreCase(Uname) && password.equalsIgnoreCase(Password)) {
+				output = "success";
+			}
+		}catch(Exception e) {
+			output = "Failed";
+			System.err.println(e.getMessage());
+		}
+		return output;
+		
+		
+	}		
+	public String insertAdmin(String admin_id, String admin_uname, String admin_password) {
+
+		String output = "";
+
+		try {
+			Connection con = connect();
+
+			if (con == null) {
+				return "Error while connecting to the database for inserting.";
+			}
+
+			// create a prepared statement
+			String query = " insert into m_admin(`m_admin_id`,`m_admin_uname`,`m_admin_password`) values (?, ?, ?)";
+
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+
+			// binding values
+			//preparedStmt.setInt(1, 0);
+			preparedStmt.setString(1, admin_id);
+			preparedStmt.setString(2, admin_uname);
+			
+			preparedStmt.setString(3, admin_password);
+
+			// execute the statement
+			preparedStmt.execute();
+			con.close();
+
+			output = "Inserted successfully";
+		} catch (Exception e) {
+			output = "Error while inserting the item.";
+			System.err.println(e.getMessage());
+		}
+
+		return output;
+	}
+	
+	
+	public String readAdmin() {
+
+		String output = "";
+
+		try {
+
+			Connection con = connect();
+
+			if (con == null) {
+
+				return "Error while connecting to the database for reading.";
+			}
+
+			// Prepare the html table to be displayed
+			output = "<table border=\"1\"><tr><th>admin_id</th><th>admin_uname</th><th>admin_password</th><th>Update</th><th>Remove</th></tr>";
+
+			String query = "select * from m_admin ";
+			// where m_admin_uname=? AND m_admin_password=?
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			
+			
+
+			// iterate through the rows in the result set
+			while (rs.next()) {
+				//String itemID = Integer.toString(rs.getInt("itemID"));
+				String admin_id = rs.getString("m_admin_id");
+				String admin_uname = rs.getString("m_admin_uname");
+				//String itemPrice = Double.toString(rs.getDouble("itemPrice"));
+				String admin_password = rs.getString("m_admin_password");
+
+				// Add into the html table
+				output += "<tr><td>" + admin_id + "</td>";
+				output += "<td>" + admin_uname + "</td>";
+				output += "<td>" + admin_password + "</td>";
+				//output += "<td>" + itemDesc + "</td>";
+
+				// buttons
+				output += "<td><input name=\"btnUpdate\" type=\"button\" value=\"Update\" class=\"btn btn-secondary\"></td>"
+						+ "<td><form method=\"post\" action=\"items.jsp\">"
+						+ "<input name=\"btnRemove\" type=\"submit\" value=\"Remove\" class=\"btn btn-danger\">"
+						+ "<input name=\"itemID\" type=\"hidden\" value=\"" + admin_id + "\">" + "</form></td></tr>";
+
+			}
+
+			con.close();
+
+			// Complete the html table
+			output += "</table>";
+		} catch (Exception e) {
+			output = "Error while reading the Admin details.";
+			System.err.println(e.getMessage());
+		}
+
+		return output;
+
+}
+}
