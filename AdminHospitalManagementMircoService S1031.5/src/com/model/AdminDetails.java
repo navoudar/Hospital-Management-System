@@ -62,7 +62,7 @@ public class AdminDetails {
 		
 		
 	}		
-	public String insertAdmin(String admin_id, String admin_uname, String admin_password) {
+	public String insertAdmin(String admin_id, String admin_uname, String admin_password,String admin_name) {
 
 		String output = "";
 
@@ -74,7 +74,7 @@ public class AdminDetails {
 			}
 
 			// create a prepared statement
-			String query = " insert into m_admin(`m_admin_id`,`m_admin_uname`,`m_admin_password`) values (?, ?, ?)";
+			String query = " insert into m_admin(`m_admin_id`,`m_admin_uname`,`m_admin_password`,`m_admin_name`) values (?, ?, ?,?)";
 
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 
@@ -84,6 +84,7 @@ public class AdminDetails {
 			preparedStmt.setString(2, admin_uname);
 			
 			preparedStmt.setString(3, admin_password);
+			preparedStmt.setString(4, admin_name);
 
 			// execute the statement
 			preparedStmt.execute();
@@ -113,7 +114,7 @@ public class AdminDetails {
 			}
 
 			// Prepare the html table to be displayed
-			output = "<table border=\"1\"><tr><th>admin_id</th><th>admin_uname</th><th>admin_password</th><th>Update</th><th>Remove</th></tr>";
+			output = "<table border=\"1\"><tr><th>admin_id</th><th>admin_uname</th><th>admin_password</th><th>admin_name</th><th>Update</th><th>Remove</th></tr>";
 
 			String query = "select * from m_admin ";
 			// where m_admin_uname=? AND m_admin_password=?
@@ -129,11 +130,13 @@ public class AdminDetails {
 				String admin_uname = rs.getString("m_admin_uname");
 				//String itemPrice = Double.toString(rs.getDouble("itemPrice"));
 				String admin_password = rs.getString("m_admin_password");
+				String admin_name = rs.getString("m_admin_name");
 
 				// Add into the html table
 				output += "<tr><td>" + admin_id + "</td>";
 				output += "<td>" + admin_uname + "</td>";
 				output += "<td>" + admin_password + "</td>";
+				output += "<td>" + admin_name + "</td>";
 				//output += "<td>" + itemDesc + "</td>";
 
 				// buttons

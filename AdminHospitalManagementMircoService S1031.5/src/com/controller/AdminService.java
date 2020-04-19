@@ -1,7 +1,7 @@
 package com.controller;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
+//import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -37,8 +37,9 @@ public class AdminService {
 		String Uid = loginObject.get("Uid").getAsString();
 		String Uname = loginObject.get("userName").getAsString();
 		String Password = loginObject.get("password").getAsString();
+		String Fname = loginObject.get("Fname").getAsString();
 		
-		String output = adminObj.insertAdmin(Uid, Uname, Password);
+		String output = adminObj.insertAdmin(Uid, Uname, Password,Fname);
 		return output;
 	}
 	
